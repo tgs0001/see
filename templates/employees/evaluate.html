@@ -1,0 +1,306 @@
+{% extends "employees\home.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Complete Your Profile</title>
+   
+   	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			background: #7abecc !important;
+		}
+		.user_card {
+			width: 550px;
+			margin-top: 20px;
+			margin-bottom: auto;
+			background: #74cfbf;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			padding: 10px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			border-radius: 5px;
+
+		}
+
+		.form_container {
+			margin-top: 20px;
+		}
+
+		#form-title{
+			color: #fff;
+		}
+		.login_btn {
+			width: 20%;
+			background: #33ccff !important;
+			color: rgb(255, 255, 255) !important;
+            margin-top: 20px;
+            justify-content: center;
+            
+		}
+		.login_btn:focus {
+			box-shadow: none !important;
+			outline: 0px !important;
+		}
+		.login_container {
+			padding: 0 2rem;
+		}
+		.input-group-text {
+			background: #f7ba5b !important;
+			color: white !important;
+			border: 0 !important;
+			border-radius: 0.25rem 0 0 0.25rem !important;
+		}
+		.input_user,
+		.input_pass:focus {
+			box-shadow: none !important;
+			outline: 0px !important;
+		}
+
+        .button {
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 2px 1px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #04AA6D;
+}
+
+.button1:hover {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+
+.button2:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+.button3 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+
+.button3:hover {
+  background-color: #0051ba;
+  color: white;
+}
+
+.button4 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+
+.button4:hover {
+  background-color: #826494;
+  color: white;
+}
+
+	</style>
+    
+   
+   
+    
+</head>
+
+<body>
+    <div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<h3 id="form-title">Evaluate Here</h3>
+                   
+				</div>
+				<div class="d-flex justify-content-center form_container">
+                     <!--
+                    <form action="" method="post" novalidate> {% csrf_token %}
+						   {{evaluateeData}} 
+                         <br>Name: {{evaluateeData.ename}}<br>
+                         Designation: {{evaluateeData.edesignation}}<br>
+
+                        <br>
+
+                        Same Section or Same Department: <br>
+                        <button name="sd1" id="sd1" class="button button1" value="1">Excellent</button>
+                        <button name="sd2" id="sd2" class="button button2" value="2">Very Good</button>
+                        <button class="button button3">Good</button>
+                        <button class="button button4">Average</button>
+
+                        <br><br>
+
+                       
+                        Committee Work: <br>
+                       <ul>
+                        <li>
+                        <label for="record">Record Number :</label>
+                        <input type="text" id="record" name="record"><br>
+                        </li>
+                        <li>
+                        <label for="purpose">Committee Purpose :</label>
+                        <input type="text" id="porpuse" name="purpose">
+                        </li>
+                    
+                        </ul>
+                       
+                            
+                      
+                        
+
+                        
+
+                        <button class="button button1">Excellent</button>
+                        <button class="button button2">Very Good</button>
+                        <button class="button button3">Good</button>
+                        <button class="button button4">Average</button>
+
+                        <br><br>
+                        Behaviour and Others:<br>
+                        <button type="button" class="button button1">Excellent</button>
+                        <button type="button" class="button button2">Very Good</button>
+                        <button class="button button3">Good</button>
+                        <button class="button button4">Average</button>
+
+                        <button type="button" id="check1" name="check1" value="1" class="btn btn-outline-primary">Primary</button>
+                        <button type="button" id="check2" name="check2" value="2" class="btn btn-secondary">Secondary</button>
+                        <button type="button" id="check3" name="check3" value="3" class="btn btn-success">Success</button>
+
+
+
+                        
+                        <br><br>
+                        <div class="d-flex justify-content-center">
+                            <input  class="login_btn" type="submit" name="profile" value="Save">
+                        </div>
+                        
+                    </form>
+                    -->
+
+                    <form action="" method="post" novalidate> {% csrf_token %}
+                        <br>Name: {{evaluateeData.ename}}<br>
+                         Designation: {{evaluateeDesignation}}<br>
+                        <br>
+                        <input id='evaluateeid' name='evaluateeid' type="hidden" value="{{evaluateeData.empid}}">
+                        <!-- <input id='1_lat' type="hidden" value="56.056180"> -->
+                        <ol>
+                            <li>
+                                Same Section or Same Department: <br>
+                                <label for="secDept">Your Observation:</label>
+                                <select name="secDept" id="secDept" required="true">
+                                  <option selected disabled="true"> Select Remark.. </option>
+                                  <option value="1">Excellent</option>
+                                  <option value="2">Very Good</option>
+                                  <option value="3">Good</option>
+                                  <option value="4">Average</option>
+                                </select>
+                                <br><br>
+                            </li>
+                            <li>
+                                Committee Work: <br>
+                                <ul>
+                                 <li>
+                                 <label for="record">Record Number :</label>
+                                 <input type="text" id="record" name="record"><br>
+                                 </li>
+                                 <li>
+                                 <label for="purpose">Committee Purpose :</label>
+                                 <input type="text" id="porpuse" name="purpose">
+                                 </li>
+                             
+                                 </ul>
+         
+                                  <label for="committee">Your Observation:</label>
+                                 <select name="committee" id="committee" required>
+                                   <option selected disabled="true"> Select Remark.. </option>
+                                   <option value="1">Excellent</option>
+                                   <option value="2">Very Good</option>
+                                   <option value="3">Good</option>
+                                   <option value="4">Average</option>
+                                 </select>
+                                 <br><br>
+                            </li>
+                            <li>
+                                Behaviour and Others: <br>
+                                <label for="behaviour">Your Observation:</label>
+                                <select name="behaviour" id="behaviour" required>
+                                  <option selected disabled="true"> Select Remark.. </option>
+                                  <option value="1">Excellent</option>
+                                  <option value="2">Very Good</option>
+                                  <option value="3">Good</option>
+                                  <option value="4">Average</option>
+                                </select>
+                                <br><br>
+                            </li>
+                        </ol>
+                        
+                        
+                       
+
+                        
+                        
+                        <div class="d-flex justify-content-center">
+                            <input  class="login_btn" type="submit" name="profile" value="Save">
+                        </div>
+                      </form>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+   
+</body>
+
+    <script>
+    /* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+//We start indexing at one because CSRF_token is considered and input field 
+*/
+
+//Query All input fields
+       
+
+    </script>
+    
+
+</html>
+
+{% endblock %}
