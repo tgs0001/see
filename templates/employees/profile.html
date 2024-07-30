@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
     <meta charset="UTF-8">
@@ -15,64 +15,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Complete Your Profile</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to filter options based on search input
+            $('#search_employee').on('input', function() {
+                var searchText = $(this).val().toLowerCase();
+                $('#id_employees option').each(function() {
+                    var optionText = $(this).text().toLowerCase();
+                    var match = optionText.indexOf(searchText) > -1;
+                    $(this).toggle(match);
+                });
+            });
+
+            // AJAX request when selecting an employee
+            $('#id_employees').change(function() {
+                var selectedName = $(this).val();
+                $.ajax({
+                    type: 'GET',
+                    data: {
+                        'employee_name': selectedName
+                    },
+                    success: function(response) {
+                        $('#id_name').val(response.name);
+                        $('#id_designation').val(response.designation);
+                        $('#id_division').val(response.division);
+                        $('#id_empid').val(response.empid);
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(errmsg);
+                    }
+                });
+            });
+        });
    
-   	<style>
-		body,
-		html {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			background: #7abecc !important;
-		}
-		.user_card {
-			width: 550px;
-			margin-top: auto;
-			margin-bottom: auto;
-			background: #74cfbf;
-			position: relative;
-			display: flex;
-			justify-content: center;
-			flex-direction: column;
-			padding: 10px;
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			border-radius: 5px;
+    </script>
+   
+   <style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #7abecc;
+        color: #333; /* Text color */
+    }
+    .btn-red {
+        background-color: #7393B3 !important; /* !important ensures that the style is applied */
+    }
+    .user_card {
+        width: 550px;
+        margin: auto;
+        margin-top: 20px;
+        background: #f8f9fa; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #form-title {
+        background-color: #7393B3; /* Background color for title */
+        color: #fff; /* White text color */
+        padding: 10px;
+        text-align: center;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .form-container {
+        margin-top: 20px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .form-row label {
+        width: 180px;
+        text-align: right;
+        margin-right: 10px;
+        color: #000; /* Black label text color */
+    }
+    .form-row textarea,
+    .form-row input {
+        flex: 1;
+        min-width: 200px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333; /* Text color for inputs */
+        background-color: #fff; /* White background for inputs */
+    }
+    .login-btn {
+        width: 40%;
+        background: #000; /* Black button */
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        margin-top: 10px;
+    }
+    .login-btn:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    /* Custom styles for the "Remark" select */
+    #remark {
+        text-align: center; /* Center text */
+    }
+    /* Styles for the message */
+    .message {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+        color: red;
+        font-weight: bold;
+    }
+    .profile-item {
+    margin-bottom: 10px; /* Optional: Add some margin between items */
+}
 
-		}
-
-		.form_container {
-			margin-top: 20px;
-		}
-
-		#form-title{
-			color: #fff;
-		}
-		.login_btn {
-			width: 50%;
-			background: #33ccff !important;
-			color: rgb(255, 255, 255) !important;
-            
-		}
-		.login_btn:focus {
-			box-shadow: none !important;
-			outline: 0px !important;
-		}
-		.login_container {
-			padding: 0 2rem;
-		}
-		.input-group-text {
-			background: #f7ba5b !important;
-			color: white !important;
-			border: 0 !important;
-			border-radius: 0.25rem 0 0 0.25rem !important;
-		}
-		.input_user,
-		.input_pass:focus {
-			box-shadow: none !important;
-			outline: 0px !important;
-		}
-
+    .profile-item b {
+    display: inline-block;
+    width: 150px; /* Adjust width as needed for alignment */
+}
+</style>
 	</style>
     
    
@@ -81,34 +149,45 @@
 </head>
 
 <body>
-    <div class="container h-100">
-		<div class="d-flex justify-content-center h-100">
-			<div class="user_card">
-				<div class="d-flex justify-content-center">
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100">
+            <div class="col-lg-6">
+                <div class="user_card">
 					<h3 id="form-title">Profile</h3>
-				</div>
-				<div class="d-flex justify-content-center form_container">
+				
                     <form action="" method="post" novalidate> {% csrf_token %}
-						<!-- {{myProfileData}} -->
-                        
-                        {{form.name.label_tag}} {{form.name}} {{form.name.errors|striptags}} <br>
-                        {{form.email.label_tag}} {{form.email}} {{form.email.errors|striptags}} <br>
-                        {{form.enothi_id.label_tag}} {{form.enothi_id}} {{form.enothi_id.errors|striptags}}<br>
-                        {{form.empid.label_tag}} {{form.empid}} {{form.empid.errors|striptags}} <br> 
-                        {{form.designation.label_tag}} {{form.designation}} {{form.designation.errors|striptags}} <br>
-                        {{form.section.label_tag}} &nbsp; &nbsp; &nbsp; &nbsp; {{form.section}} {{form.section.errors|striptags}} <br>
-                        {{form.department.label_tag}} {{form.department}} {{form.department.errors|striptags}} <br> 
-                        {{form.division.label_tag}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{form.division}} {{form.division.errors|striptags}} <br> 
-                        {{form.directorate.label_tag}} &nbsp;{{form.directorate}} {{form.directorate.errors|striptags}} <br><br>
 
-						
-						<br>
-						<div class="d-flex justify-content-center">
-							<input  class="login_btn" type="submit" name="profile" value="Save">
+                        <div class="profile-item">
+                            <b>Name </b>{{ myProfileData.ename }}<br>
+                        </div>
+                        <div class="profile-item">
+                            <b>Employee ID </b>{{ myProfileData.empid }}<br>
+                        </div>
+                        <div class="profile-item">
+                            <b>Email </b>{{ myProfileData.eemail }}<br>
+                        </div>
+                        <div class="profile-item">
+                            <b>Designation </b>{{ myProfileData.edesignation }}<br>
+                        </div>
+                        <div class="profile-item">
+                            <b>Division </b>{{ myProfileData.edivision }}<br>
+                        </div>
+
+                        <div class="profile-item">
+                            <b>Evaluation Status </b>{{evaluation_count}} / {{employee_count}}<br>
+                        </div>
+    
+                        <br>
+                        <br>
+                        <i> 
+                            If the above information needs to be updated, please contact the IT department!
+                        </i>
+
+                        <div class="d-flex justify-content-center">
+							<input  class="btn btn-dark login-btn btn-red" type="submit" name="profile" value="Home">
 						</div>
-
-                        
                     </form>
+                   
                     
                 </div>
                 
@@ -129,7 +208,7 @@
 
 //Query All input fields
         var form_fields = document.getElementsByTagName('input')
-        form_fields[1].placeholder='Enter Your Full Name..';
+        form_fields[1].placeholder='Search by Name..';
         form_fields[2].placeholder='';
         form_fields[3].placeholder= '';
 
@@ -139,9 +218,7 @@
         }
 
         
-        let x = 16 + 4 + "Volvo";
-        document.getElementById("demo").innerHTML = enothi_id;
-
+        
     </script>
     
 
