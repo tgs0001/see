@@ -13,6 +13,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     
     <title>Evaluation</title>
    
@@ -28,7 +31,7 @@
 			width: 750px;
 			margin-top: 20px;
 			margin-bottom:auto;
-			background: #74cfbf;
+			background: #f5f5f5;
 			position: relative;
 			display: flex;
 			justify-content: center;
@@ -46,7 +49,7 @@
 		}
 
 		#form-title{
-			color: #fff;
+			color: #5d73f5;
 		}
 		.login_btn {
 			width: 50%;
@@ -55,7 +58,7 @@
             
 		}
 		.login_btn:focus {
-			
+			box-shadow: none !important;
 			outline: 0px !important;
 		}
 		.login_container {
@@ -93,23 +96,110 @@
 				<div class="d-flex justify-content-center">
 					<h3 id="form-title">Report</h3>
 				</div>
+				
+
 				<div class="d-flex justify-content-center form_container">
+					
 					<form action="" method="post" novalidate> {% csrf_token %}
+						Name: {{evaluatee_name}}<br>
+						Designation: {{evaluatee_designation}}<br>
+						Division:  {{evaluatee_division}}<br><br>
+
+
+						<div class="container">
+							<div class="row">
+								<div class="col">
+									
+									<div style="width: 98%; margin: auto;">
+										Divisional Work
+										<canvas id="myPieChart1"></canvas>
+										<div id="chartName1" style="text-align: center; margin-top: 10px;"></div>
+									</div>
+								</div>
+								<div class="col">
+									Committee Work
+									<div style="width: 98%; margin: auto;">
+										<canvas id="myPieChart2"></canvas>
+										<div id="chartName2" style="text-align: center; margin-top: 10px;"></div>
+									</div>
+								</div>
+							</div><br>
+							<div class="row">
+								<div class="col">
+									Overall Behaviour
+									<div style="width: 98%; margin: auto;">
+										<canvas id="myPieChart3"></canvas>
+										<div id="chartName3" style="text-align: center; margin-top: 10px;"></div>
+									</div>
+								</div>
+								<div class="col">
+									All Categories
+									<div style="width: 98%; margin: auto;">
+										<canvas id="myPieChart4"></canvas>
+										<div id="chartName4" style="text-align: center; margin-top: 10px;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br>
+                        <b>Percentage Calculation:</b>
+                        <table style="width:100%; text-align: center;">
+                            <tr>
+                              
+                              <th style="width: 120px; text-align: center;">Categories</th>
+                              <th style="width: 120px; text-align: center;">Excellent <br>(%)</th>
+                              <th style="width: 120px; text-align: center;">Very Good <br> (%)</th>
+							  <th style="width: 70px; text-align: center;">Good (%)</th> 
+							  <th style="width: 70px; text-align: center;">Average (%)</th>
+                            </tr>
+                                <tr>
+                                    <td>Divisional Work</td>
+                                {% for dper in div_percent %}
+                                    <td>{{dper}}</td>
+                                
+                                {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    <td>Committee Work</td>
+                                {% for com in com_percent %}
+                                    <td>{{com}}</td>
+                                
+                                {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    <td>Overall Behaviour</td>
+                                {% for behave in behave_percent %}
+                                    <td>{{behave}}</td>
+                                {% endfor %}
+                                </tr>
+
+                                <tr>
+                                    <td>All Categories</td>
+                                {% for allcat in allcat_percent %}
+                                    <td>{{allcat}}</td>
+                                {% endfor %}
+                                </tr>
+
+                           
+                          </table><br>
+                        <b>In Details:</b>
 						<table style="width:100%; text-align: center;">
                             <tr>
-                              <th style="width: 120px; text-align: center;">Evaluatee</th>
+                              
                               <th style="width: 120px; text-align: center;">Evaluator</th>
-                              <th style="width: 120px; text-align: center;">Evaluator's Section</th>
-                              <th style="width: 70px; text-align: center;">Section or Departmental Work</th>
+                              <th style="width: 120px; text-align: center;">Evaluator's Division</th>
+                              <th style="width: 70px; text-align: center;">Divisional Work</th>
 							  <th style="width: 70px; text-align: center;">Committee Work</th> 
-							  <th style="width: 70px; text-align: center;">Behaviour & Others</th>
+							  <th style="width: 70px; text-align: center;">Overall Behaviour</th>
                             </tr>
                             
                                 {% for rep in report_data %}
                                 <tr>
-                                    <td>{{rep.evaluatee}}</td>
                                     
-                                    <td>{{rep.section}}</td>
+                                    <td>{{rep.evaluator}}</td>
+                                    <td>{{rep.division}}</td>
                                     <td>{{rep.secDeptEval}}</td>
                                     <td>{{rep.comEval}}</td>
 									<td>{{rep.behavEval}}</td>
@@ -133,6 +223,8 @@
 				</form>
                 </div>
                 
+               
+
 				<br>
           
                 
@@ -147,20 +239,215 @@
 
     </script>
 
-    <script>
-        function myFunction() {
-        //alert(document.getElementById("employee").value);
-        //var employees = JSON.parse({{"employeeData | escapejs"}});
-        //var data = JSON.parse ("{{employeeData | escapejs}}");
+<script>
+	 document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('myPieChart1').getContext('2d');
+            var labels = JSON.parse('{{ labels_json1|escapejs }}');
+            var data = JSON.parse('{{ data_json1|escapejs }}');
 
-        //alert("{{employeeData}}"[0]);
-        //alert("{{employeeData}}");
-
-        //document.write(5 + 6);
-        alert(document.getElementById("employee").value);
-       
-        }
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Employee Designations',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+		document.getElementById('myPieChart1').innerText = 'Chart 1 Title';
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('myPieChart2').getContext('2d');
+        var labels = JSON.parse('{{ labels_json2|escapejs }}');
+        var data = JSON.parse('{{ data_json2|escapejs }}');
+
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Employee Designations',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('myPieChart3').getContext('2d');
+        var labels = JSON.parse('{{ labels_json3|escapejs }}');
+        var data = JSON.parse('{{ data_json3|escapejs }}');
+
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Employee Designations',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('myPieChart4').getContext('2d');
+        var labels = JSON.parse('{{ labels_json4|escapejs }}');
+        var data = JSON.parse('{{ data_json4|escapejs }}');
+
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Employee Designations',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    
+</script>
+
+
+
     
     
     
